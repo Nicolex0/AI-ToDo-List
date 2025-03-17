@@ -38,6 +38,16 @@ def view_tasks():
     print(tasks[["Task", "Deadline", "Priority", "Days Left"]])
     print("\n")
 
+def prioritize_tasks(tasks):
+    if tasks.empty:
+        print("\nNo tasks to prioritize")
+        return tasks
+    
+    tasks["Deadline"] = pd.to_datetime(tasks["Deadline"])
+    tasks = tasks.sort_values(by=["Deadline", "Priority"], ascending=[True, False])
+
+    return tasks
+
 def main():
     while True:
         print("\n To-Do List Menu:")
