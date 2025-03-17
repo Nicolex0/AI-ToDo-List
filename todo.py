@@ -1,7 +1,39 @@
 import pandas as pd
 from datetime import datetime
+import nltk
+from nltk.tokenize import word_tokenize
+from datetime import timedelta
+import re
 
 TASKS_FILE = "tasks.csv" 
+
+nltk.download('punkt')
+
+def parse_natural_input(user_input):
+    words = word_tokenize(user_input.lower())
+
+    today = datetime.today()
+    if "tomorrow" in words:
+        due_date = today + timedelta(days=1)
+    elif "friday" in words:
+        due_date = today + timedelta(days=(4 - today.weekday()) % 7)
+    else:
+        due_date = None
+
+    time_match = re.search(r'(\d{1,2})(?:\s?(am|pm))?', user_input, re.IGNORECASE)
+    task_time = "Anytime"
+    if time_match:
+        hour = int(time_match.group(1))
+        if time_match.group(2):
+            if "pm" in time_match.group(2).lower() and hour != 12:
+                hour += 12
+            elif "am" in time_match.group(2).lower() and hour == 12:
+                hour = 0
+            task_time = f"{hour}:00"
+
+    cleaned_task = re.sub(r'\b(tomorrow|friday|\d{1,2}(?:\s?(am|pm))?)\b', '', user_input, flags=re.IGNORECASE).strip()
+
+    return cleaned_task, due_date.strftime("%Y-%m-%d"), task_time
 
 def load_tasks():
     try:
