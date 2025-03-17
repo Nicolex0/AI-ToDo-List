@@ -18,7 +18,7 @@ def add_task():
     priority = int(input("Enter priority (1-5, where 5 is highest): "))
 
     tasks = load_tasks()
-    tasks = tasks.append({"Task": task, "Deadline": deadline, "Priority": priority}, ignore_index=True)
+    tasks = pd.concat([tasks, pd.DataFrame([{"Task": task, "Deadline": deadline, "Priority": priority}])], ignore_index=True)
     save_tasks(tasks)
     print("Task added successfully!\n\n")
 
@@ -34,7 +34,7 @@ def view_tasks():
     tasks["Urgency"] = tasks["Priority"] / (tasks["Days Left"] + 1)
     tasks = tasks.sort_values(by="Urgency", ascending=False)
 
-    print("\n Yout To-Do List (Sorted by Urgency):")
+    print("\n Your To-Do List (Sorted by Urgency):")
     print(tasks[["Task", "Deadline", "Priority", "Days Left"]])
     print("\n")
 
