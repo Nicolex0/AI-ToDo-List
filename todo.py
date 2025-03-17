@@ -37,3 +37,24 @@ def view_tasks():
     print("\n Yout To-Do List (Sorted by Urgency):")
     print(tasks[["Task", "Deadline", "Priority", "Days Left"]])
     print("\n")
+
+def main():
+    while True:
+        print("\n To-Do List Menu:")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            add_task()
+        elif choice == "2":
+            view_tasks()
+        elif choice =="3":
+            print("Exiting. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+        main()
